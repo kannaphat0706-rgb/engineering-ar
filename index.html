@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+    <title>AR 3D Section Mode</title>
+
+    <!-- ไลบรารี A-Frame และ MindAR -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+
+    <style>
+      body { margin: 0; overflow: hidden; font-family: sans-serif; }
+      
+      /* UI แถบหัวข้อด้านบน */
+      #top-bar {
+        position: fixed;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 14px;
+        z-index: 1000;
+        pointer-events: none;
+      }
+
+      /* UI แถบปุ่มเลือก Section ด้านล่าง */
+      #bottom-bar {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 1000;
+      }
+      .btn-section {
+        background: rgba(20, 20, 20, 0.85);
+        border: 1.5px solid #555;
+        color: #ddd;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        backdrop-filter: blur(4px);
+      }
+      .btn-section.active {
+        background: #007bff;
+        border-color: #66b0ff;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ข้อความบนหน้าจอ -->
+    <div id="top-bar">[ AR 3D SECTION MODE ]</div>
+
+    <!-- ปุ่มเลือกโหมดตัด -->
+    <div id="bottom-bar">
+      <button class="btn-section active" onclick="switchSection('full')">เต็มชิ้น</button>
+      <button class="btn-section" onclick="switchSection('aa')">Section A-A</button>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene 
+      mindar-image="imageTargetSrc: ./targets.mind; filterMinCF:0.0001; filterBeta: 0.001;" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <!-- โหลดไฟล์ 3D โมเดล -->
+        <a-asset-item id="modelFull" src="./model_full.glb"></a-asset-item>
+        <a-asset-item id="modelAA" src="./model_section_aa.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- เมื่อกล้องส่องเจอมาร์กเกอร์ -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <!-- Container สำหรับ
