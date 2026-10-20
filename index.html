@@ -84,4 +84,44 @@
 
       <!-- เมื่อกล้องส่องเจอมาร์กเกอร์ -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Container สำหรับ
+        <!-- Container สำหรับโมเดล 3D -->
+                <a-entity
+          id="modelContainer"
+          position="0 0 0"
+          rotation="0 0 0"
+          scale="0.5 0.5 0.5">
+          <a-gltf-model
+            id="activeModel"
+            src="#modelFull"
+            position="0 0 0">
+          </a-gltf-model>
+        </a-entity>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      let currentSection = "full";
+
+      function switchSection(section) {
+        currentSection = section;
+
+        const model = document.querySelector("#activeModel");
+        const buttons = document.querySelectorAll(".btn-section");
+
+        if (!model) return;
+
+        model.setAttribute(
+          "src",
+          section === "aa" ? "#modelAA" : "#modelFull"
+        );
+
+        buttons.forEach((button) => {
+          button.classList.remove("active");
+        });
+
+        const activeButton = section === "aa" ? buttons[1] : buttons[0];
+        if (activeButton) activeButton.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
